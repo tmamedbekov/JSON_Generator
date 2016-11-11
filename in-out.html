@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Split Code</title>
+    <script src="https://code.jquery.com/jquery-1.5.2.min.js"></script>
+  </head>
+  <body>
+      <h2>JSON Processor</h2>
+      <p>
+        <label>Input</label>
+        <br>
+        <textarea id="input" style="width:90%; height:400px;"></textarea></p>
+      <p><input type="button" value="Start"></p>
+
+      <p>
+        <label>Output</label>
+        <br>
+        <textarea id="output" style="width:90%; height:400px;"></textarea>
+      </p>
+  </body>
+  <script type="text/javascript">
+    $(function() {
+		$('input[type=button]').click(function (){
+          var str = $("#input").val().split('\n<br>');
+          const regex = /language.*?,/g;
+          const reject = /hctra.*?:/g;
+          const rej = /id.*?}/g;
+          const rule = /[0-9][0-9]:[0-9][0-9]:[0-9][0-9]/g;
+          const author = /[(]hctra.*?:/g;
+          const module = /\/HCTRA\/.*?\//g;
+          const path = /\/sitecore\/.*?,/g;
+          var pattern = /targets:PROD Site/g;
+          let m, mo, q, t, aut, mod, pat;
+          let output="";
+
+
+          //language
+          while ((m = regex.exec(str)) !== null) {
+              if (m.index === regex.lastIndex) {
+                  regex.lastIndex++;
+              }
+              m.forEach((match, groupIndex) => {
+                  // document.write(`"Language": "${match}",<br>`);
+                  output = output+`{\n"Language": "${match}"\n`;
+              });
+          }
+          //Author
+          while ((mo = reject.exec(str)) !== null) {
+              if (mo.index === reject.lastIndex) {
+                  reject.lastIndex++;
+              }
+              mo.forEach((fetch, groupIndex) => {
+                  // document.write(`"Author": "${fetch}",<br>`);
+                  output = output+`"Author": "${fetch}"\n`;
+              });
+          }
+          //ItemID
+          while ((q = rej.exec(str)) !== null) {
+              if (q.index === rej.lastIndex) {
+                  rej.lastIndex++;
+              }
+              q.forEach((mesh, groupIndex) => {
+                  // document.write(`"ItemID": "${mesh}",<br>`);
+                  output = output+`"ItemID": "${mesh}"\n`;
+              });
+          }
+          //next TIME
+          while ((t = rule.exec(str)) !== null) {
+              if (t.index === rule.lastIndex) {
+                  rule.lastIndex++;
+              }
+              t.forEach((fuse, groupIndex) => {
+                  // document.write(`"Time": "${fuse}",<br>`);
+                  output = output+`"Time": "${fuse}"\n`;
+              });
+          }
+          //next Author
+          while ((aut = author.exec(str)) !== null) {
+              if (aut.index === author.lastIndex) {
+                  author.lastIndex++;
+              }
+              aut.forEach((hor, groupIndex) => {
+                  // document.write(`"Author": "${hor}",<br>`);
+                  output = output+`"Time": "${hor}"\n`;
+              });
+          }
+          //next Module
+          while ((mod = module.exec(str)) !== null) {
+              if (mod.index === module.lastIndex) {
+                  module.lastIndex++;
+              }
+              mod.forEach((ule, groupIndex) => {
+                  // document.write(`"Module": "${ule}",<br>`);
+                  output = output+`"Module": "${ule}"\n`;
+              });
+          }
+          //next ItemPath
+          while ((pat = path.exec(str)) !== null) {
+              if (pat.index === path.lastIndex) {
+                  path.lastIndex++;
+              }
+              pat.forEach((pa, groupIndex) => {
+                  // document.write(`"ItemPath": "${pa}",<br>`);
+                  output = output+`"ItemPath": "${pa}"\n`;
+              });
+          }
+          //Published to PROD
+          if(pattern.test(str)) {
+            // document.write('"Published to PROD":"Yes",');
+            output = output+'"Published to PROD":"Yes"\n},';
+          }
+          else {
+            // document.write('"Published to PROD":"No"');
+            output = output+'"Published to PROD":"No"\n},';
+          }
+
+		  $("#output").val(output);
+        });
+      });
+  </script>
+</html>
